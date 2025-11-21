@@ -9,9 +9,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'blogging-website-te69.onrender.com',
+    '.onrender.com',
     'localhost',
     '127.0.0.1',
 ]
+
 
 
 INSTALLED_APPS = [
