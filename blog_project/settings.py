@@ -7,7 +7,12 @@ SECRET_KEY = 'django-insecure-replace-this-for-production'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
+ALLOWED_HOSTS = [
+    'blogging-website-te69.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
