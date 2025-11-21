@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <div class="card" style="max-width:520px;margin:0 auto">
+      <h2>Register</h2>
+      <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+          <div class="card" style="background:rgba(255,230,230,0.9);border-left:4px solid #ef4444;margin-bottom:0.5rem;padding:0.5rem;color:var(--text)">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+        {{ form.as_p }}
+        <div style="margin-top:0.5rem"><button class="btn" type="submit">Register</button></div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

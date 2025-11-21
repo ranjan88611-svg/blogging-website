@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Posts{% endblock %}
+{% block content %}
+  <section class="hero">
+    <h2>Latest Posts</h2>
+    <p class="muted">Browse recent articles, search, and find topics that interest you.</p>
+    <form method="get" style="margin-top:0.75rem;display:flex;gap:0.5rem;">
+      <input type="text" name="q" placeholder="Search posts, categories, tags..." value="{{ request.GET.q }}">
+      <button class="btn" type="submit">Search</button>
+    </form>
+  </section>
+
+  <div class="layout">
+    <div>
+      <div class="posts">
+      {% for post in posts %}
+        <article class="post fade-in">
+          <div style="display:flex;gap:0.75rem;align-items:flex-start">
+            {% if post.cover %}
+              <img class="cover" src="{{ post.cover.url }}" alt="{{ post.title }}" style="width:160px;height:100px;object-fit:cover;flex-shrink:0;border-radius:8px">
+            {% endif %}
+            <div style="flex:1">
+              <h3 style="margin-bottom:0.25rem"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+              <div class="author-row">
+                {% if post.author.profile.avatar %}
+                  <img src="{{ post.author.profile.avatar.url }}" class="profile-avatar" alt="avatar">
+                {% endif %}
+                <div>
+                  <div class="author-name">{{ post.author.get_full_name|default:post.author.username }}</div>
+                  <div class="meta">{{ post.created|date:"M d, Y" }}{% if post.category %} • {{ post.category.name }}{% endif %}</div>
+                </div>
+              </div>
+              <p style="margin-top:0.5rem">{{ post.content|truncatechars:220 }}</p>
+              <div class="tags">
+                {% for t in post.tags.all %}
+                  <span class="tag">{{ t.name }}</span>
+                {% endfor %}
+              </div>
+              <p class="buttons"><a class="btn" href="{{ post.get_absolute_url }}">Read more</a></p>
+            </div>
+          </div>
+        </article>
+      {% empty %}
+        <p>No posts found.</p>
+      {% endfor %}
+      </div>
+
+      <div class="pagination">
+        {% if is_paginated %}
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          {% endif %}
+          <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h4>Subscribe</h4>
+        <p class="muted">Get updates when new posts are published.</p>
+        <a class="btn" href="{% url 'subscribe' %}">Subscribe</a>
+      </div>
+
+      <div class="card">
+        <h4>Featured</h4>
+        <div class="featured">
+          {% for f in featured_posts %}
+            <a href="{{ f.get_absolute_url }}">{{ f.title }}</a>
+          {% empty %}
+            <p class="muted">No featured posts yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card">
+        <h4>Categories</h4>
+        <ul>
+          {% for cat in categories %}
+            <li><a href="#">{{ cat.name }}</a></li>
+          {% empty %}
+            <li class="muted">No categories</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </aside>
+  </div>
+{% endblock %}

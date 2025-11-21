@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <div class="card" style="max-width:640px;margin:0 auto">
+      <h2>Edit Profile</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="margin-top:0.5rem"><button class="btn" type="submit">Save</button></div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

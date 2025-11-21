@@ -1,0 +1,7 @@
+New post published: {{ post.title }}
+
+{{ post.content|truncatechars:300 }}
+
+Read it here: {{ post_url }}
+
+— My Django Blog

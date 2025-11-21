@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+  <div class="layout">
+    <div>
+      <article class="post">
+        <h2>{{ post.title }}</h2>
+        <p class="meta">By {{ post.author }} • {{ post.created|date:"M d, Y" }}</p>
+        <div class="tags">
+          {% for t in post.tags.all %}
+            <span class="tag">{{ t.name }}</span>
+          {% endfor %}
+        </div>
+        {% if post.cover %}
+          <img src="{{ post.cover.url }}" alt="cover" class="cover">
+        {% endif %}
+        <div class="content">{{ post.content|linebreaks }}</div>
+        <p class="buttons">
+          <a class="btn" href="{% url 'post_like' post.slug %}">Like ({{ post.likes.count }})</a>
+          {% if user == post.author or user.is_staff %}
+            <a class="btn secondary" href="{% url 'post_update' post.slug %}">Edit</a>
+            <a class="btn secondary" href="{% url 'post_delete' post.slug %}">Delete</a>
+            {% if post.status == 'draft' %}
+              <form method="post" action="{% url 'post_publish' post.slug %}" style="display:inline">
+                {% csrf_token %}
+                <button class="btn" type="submit">Publish</button>
+              </form>
+            {% else %}
+              <span style="margin-left:0.5rem;color:var(--muted)">Published{% if post.published_at %} on {{ post.published_at|date:"M d, Y H:i" }}{% endif %}</span>
+              <form method="post" action="{% url 'post_unpublish' post.slug %}" style="display:inline;margin-left:0.5rem">
+                {% csrf_token %}
+                <button class="btn secondary" type="submit">Unpublish</button>
+              </form>
+            {% endif %}
+          {% endif %}
+        </p>
+      </article>
+
+      <section id="comments">
+        <h3>Comments</h3>
+        {% for comment in post.comments.all %}
+          <div class="comment">
+            <p><strong>{{ comment.name }}</strong> - {{ comment.created|date:"M d, Y H:i" }}</p>
+            <div>{{ comment.body|linebreaks }}</div>
+          </div>
+        {% empty %}
+          <p>No comments yet.</p>
+        {% endfor %}
+
+        <h4>Leave a comment</h4>
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button class="btn" type="submit">Submit</button>
+        </form>
+      </section>
+    </div>
+
+    <aside class="sidebar">
+      <div class="card">
+        <h4>About the author</h4>
+        <p class="muted">{{ post.author.get_full_name }}{% if post.author.profile.bio %} — {{ post.author.profile.bio }}{% endif %}</p>
+      </div>
+
+      <div class="card">
+        <h4>Related</h4>
+        <p class="muted">Related posts by category or tags will appear here.</p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="share">
+      <a href="https://twitter.com/intent/tweet?text={{ post.title }}%20{{ request.build_absolute_uri }}" target="_blank">Share on Twitter</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank">Share on Facebook</a>
+    </div>
+  </div>
+
+{% endblock %}
