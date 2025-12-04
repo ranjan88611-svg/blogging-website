@@ -1,60 +1,62 @@
 <!doctype html>
 <html lang="en">
-  {% load static %}
-  <head>
-    <meta charset="utf-8">
-    <meta name="description" content="A clean, responsive Django blog starter built with practical features.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Blog{% endblock %}</title>
-    <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container">
-        <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
-          <div class="logo">
-            <a href="{% url 'post_list' %}" class="logo">
-              <img src="{% static 'img/favicon.svg' %}" alt="logo" style="width:32px;height:32px">
-              <span class="brand">My Django Blog</span>
-            </a>
-          </div>
-          <nav>
-            <a href="{% url 'about' %}">About</a>
-            <a href="{% url 'contact' %}">Contact</a>
-            <a href="{% url 'subscribe' %}">Subscribe</a>
-            {% if user.is_authenticated %}
-              <a href="{% url 'dashboard' %}">Dashboard</a>
-              <a href="{% url 'post_create' %}">New Post</a>
-              <a href="{% url 'profile_edit' %}">{{ user.username }}</a>
-              <a href="{% url 'logout' %}">Logout</a>
-            {% else %}
-              <a href="{% url 'login' %}">Login</a>
-              <a href="{% url 'register' %}">Register</a>
-            {% endif %}
-          </nav>
-        </div>
-      </div>
-    </header>
+{% load static %}
 
-    <main class="container">
-      {% if messages %}
-        <div style="max-width:720px;margin:0.6rem auto;">
-          {% for message in messages %}
-            <div class="card" style="border-left:4px solid var(--primary);padding:0.6rem;margin-bottom:0.5rem;color:var(--text);">
-              {{ message }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-      {% block content %}{% endblock %}
-    </main>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="A clean, responsive Django blog starter built with practical features.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Blog{% endblock %}</title>
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
 
-    <footer class="site-footer">
-      <div class="container">&copy; {% now 'Y' %} My Django Blog
-        <button id="theme-toggle">Toggle Theme</button>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">
+        <a href="{% url 'post_list' %}" class="logo">
+          <img src="{% static 'img/favicon.svg' %}" alt="logo" style="width:32px;height:32px">
+          <span class="brand">My Blogs</span>
+        </a>
       </div>
-    </footer>
-    <script src="{% static 'js/theme.js' %}"></script>
-  </body>
+      <nav>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'subscribe' %}">Subscribe</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'post_create' %}">New Post</a>
+        <a href="{% url 'profile_edit' %}">{{ user.username }}</a>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% if messages %}
+    <div style="max-width:900px;margin:1rem auto;">
+      {% for message in messages %}
+      <div class="card" style="border-left:4px solid var(--brand-primary);padding:1rem;margin-bottom:1rem;">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>&copy; {% now 'Y' %} My Blogs. All rights reserved.</div>
+      <button id="theme-toggle">🌓 Toggle Theme</button>
+    </div>
+  </footer>
+  <script src="{% static 'js/theme.js' %}"></script>
+</body>
+
 </html>
